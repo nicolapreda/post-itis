@@ -47,7 +47,7 @@ RUN adduser --system --uid 1001 nextjs
 # Install Ghostscript for PDF compression
 RUN apk add --no-cache ghostscript
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next

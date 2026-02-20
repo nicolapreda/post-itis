@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: 'Post-Itis | Archivio Digitale',
   },
   icons: {
-    icon: '/favicon.ico', // Ensure this exists or use a default
+    icon: '/favicon.png',
   },
 };
 
