@@ -13,6 +13,9 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path;
 
+  // Don't render the navbar over the PDF reader page
+  if (pathname.startsWith('/read')) return null;
+
   const menuVariants: Variants = {
     closed: {
       opacity: 0,

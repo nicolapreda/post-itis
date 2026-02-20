@@ -23,6 +23,7 @@ export async function authenticate(
                     return 'Qualcosa è andato storto.';
             }
         }
+        // NextAuth throws errors (like NEXT_REDIRECT) for redirects, so we MUST rethrow them
         throw error;
     }
 }
