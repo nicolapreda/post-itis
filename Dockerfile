@@ -61,9 +61,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3008
 
-ENV PORT 3000
+ENV PORT 3008
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
