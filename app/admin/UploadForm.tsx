@@ -3,8 +3,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getRecentSchoolYears } from '@/lib/utils';
 
 export default function UploadForm() {
+  const years = getRecentSchoolYears(10);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState('');
@@ -65,16 +67,13 @@ export default function UploadForm() {
         />
       </div>
 
-      <div>
-        <label className="block text-sm font-bold mb-1" htmlFor="year">Anno Scolastico</label>
-        <select name="year" className="w-full px-3 py-2 border rounded" required>
-          <option value="2023-2024">2023-2024</option>
-          <option value="2022-2023">2022-2023</option>
-          <option value="2021-2022">2021-2022</option>
-          <option value="2020-2021">2020-2021</option>
-          <option value="2019-2020">2019-2020</option>
-          <option value="2018-2019">2018-2019</option>
-          <option value="2017-2018">2017-2018</option>
+// Add import at the top (I can't see the top here, so I will add it separately or assume I can modify lines)
+// Wait, I should not assume. I will do this in two steps or be smart.
+// I will replace the select block.
+        <select name="year" className="w-full px-3 py-2 border rounded" required defaultValue={years[0]}>
+          {years.map(year => (
+            <option key={year} value={year}>{year}</option>
+          ))}
         </select>
       </div>
 

@@ -9,6 +9,8 @@ services:
     restart: always
     ports:
       - "3008:3000"
+    env_file:
+      - .env
     environment:
       - NEXTAUTH_URL=http://localhost:3000
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}

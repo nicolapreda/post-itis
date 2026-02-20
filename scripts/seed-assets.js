@@ -1,5 +1,5 @@
 
-require('dotenv').config({ path: '.env' });
+try { require('dotenv').config({ path: '.env' }); } catch (e) { /* ignore */ }
 const mysql = require('mysql2/promise');
 
 const newspapers = [
