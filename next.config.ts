@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  /* config options here */
+  serverExternalPackages: ["mysql2", "bcryptjs"],
 };
 
 export default nextConfig;
