@@ -67,9 +67,8 @@ export default function UploadForm() {
         />
       </div>
 
-// Add import at the top (I can't see the top here, so I will add it separately or assume I can modify lines)
-// Wait, I should not assume. I will do this in two steps or be smart.
-// I will replace the select block.
+      <div>
+        <label className="block text-sm font-bold mb-1" htmlFor="year">Anno Scolastico</label>
         <select name="year" className="w-full px-3 py-2 border rounded" required defaultValue={years[0]}>
           {years.map(year => (
             <option key={year} value={year}>{year}</option>
