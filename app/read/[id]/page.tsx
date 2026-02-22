@@ -24,10 +24,14 @@ export default async function ReadPage({ params }: PageProps) {
     notFound();
   }
 
-  // Costruisci l'URL assoluto per il visualizzatore di Google Drive
+  // Costruisci l'URL assoluto per il visualizzatore
   const siteUrl = 'https://post-itis.it';
   const absolutePdfUrl = `${siteUrl}${newspaper.pdf_path}`;
-  const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(absolutePdfUrl)}&embedded=true`;
+  
+  // Utilizziamo il visualizzatore PDF.js hostato da Mozilla, che è incredibilmente responsive
+  // e supporta la visualizzazione a due pagine ("spread") tramite opzioni nell'interfaccia.
+  // Parametri Hash: #pagemode=none&zoom=page-fit
+  const viewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(absolutePdfUrl)}#zoom=page-fit`;
 
   return (
     <div className="h-screen w-screen bg-stone-900 flex flex-col">
@@ -42,10 +46,10 @@ export default async function ReadPage({ params }: PageProps) {
              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
            </svg>
-           <p className="font-medium animate-pulse">Caricamento visualizzatore in corso...</p>
+           <p className="font-medium animate-pulse text-center">Caricamento PDF avanzato...<br/><span className="text-xs">(Usa il pulsante in alto a destra nel visualizzatore per abilitare la Vista a due Pagine)</span></p>
          </div>
          
-         {/* Google Docs Viewer Iframe */}
+         {/* Mozilla PDF.js Viewer Iframe */}
          <iframe 
           src={viewerUrl} 
           className="w-full h-full border-none absolute inset-0 z-20"
