@@ -34,3 +34,15 @@ export async function GET(request: Request, props: { params: Promise<{ filename:
         return new NextResponse('Not Found', { status: 404 });
     }
 }
+
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, OPTIONS',
+            // Allow standard headers that XHR/Fetch might send
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, Range',
+        },
+    });
+}
