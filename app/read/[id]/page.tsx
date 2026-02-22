@@ -24,14 +24,10 @@ export default async function ReadPage({ params }: PageProps) {
     notFound();
   }
 
-  // Costruisci l'URL assoluto per il visualizzatore
-  const siteUrl = 'https://post-itis.it';
-  const absolutePdfUrl = `${siteUrl}${newspaper.pdf_path}`;
-  
-  // Utilizziamo il visualizzatore PDF.js hostato da Mozilla, che è incredibilmente responsive
-  // e supporta la visualizzazione a due pagine ("spread") tramite opzioni nell'interfaccia.
-  // Parametri Hash: #pagemode=none&zoom=page-fit
-  const viewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(absolutePdfUrl)}#zoom=page-fit`;
+  // Costruisci l'URL relativo in modo che funzioni sia in locale che in produzione
+  // Passiamo il path del pdf (es. /uploads/file.pdf) al nostro visualizzatore locale
+  // Parametri Hash: #pagemode=none&zoom=page-fit per ottimizzare la visualizzazione
+  const viewerUrl = `/pdfjs/web/viewer.html?file=${encodeURIComponent(newspaper.pdf_path)}#zoom=page-fit`;
 
   return (
     <div className="h-screen w-screen bg-stone-900 flex flex-col">
