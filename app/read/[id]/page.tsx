@@ -24,17 +24,33 @@ export default async function ReadPage({ params }: PageProps) {
     notFound();
   }
 
+  // Costruisci l'URL assoluto per il visualizzatore di Google Drive
+  const siteUrl = 'https://post-itis.it';
+  const absolutePdfUrl = `${siteUrl}${newspaper.pdf_path}`;
+  const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(absolutePdfUrl)}&embedded=true`;
+
   return (
     <div className="h-screen w-screen bg-stone-900 flex flex-col">
-      <header className="bg-stone-800 text-white p-4 flex justify-between items-center shadow-md z-1">
-        <h1 className="text-xl font-bold">{newspaper.title} <span className="text-stone-400 text-sm">({newspaper.year})</span></h1>
-        <a href="/" className="text-red-400 hover:text-red-300">Close ✕</a>
+      <header className="bg-stone-800 text-white p-4 flex justify-between items-center shadow-md z-10">
+        <h1 className="text-xl font-bold truncate max-w-[80%]">{newspaper.title} <span className="text-stone-400 text-sm">({newspaper.year})</span></h1>
+        <a href="/" className="text-red-400 hover:text-red-300 whitespace-nowrap ml-4">Close ✕</a>
       </header>
-      <div className="flex-grow relative">
+      <div className="flex-grow relative bg-stone-100 flex items-center justify-center">
+         {/* Spinner/Testo di caricamento che sta dietro l'iframe finché non carica */}
+         <div className="absolute flex flex-col items-center gap-4 text-stone-500 z-10">
+           <svg className="animate-spin h-8 w-8 text-[#ea1d24]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+           </svg>
+           <p className="font-medium animate-pulse">Caricamento visualizzatore in corso...</p>
+         </div>
+         
+         {/* Google Docs Viewer Iframe */}
          <iframe 
-          src={newspaper.pdf_path} 
-          className="w-full h-full border-none"
+          src={viewerUrl} 
+          className="w-full h-full border-none absolute inset-0 z-20"
           title={`PDF of ${newspaper.title}`}
+          allowFullScreen
         />
         
         {/* Fallback / Download Action */}
