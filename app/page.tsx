@@ -18,9 +18,11 @@ export default async function Home() {
   let newspapers: Newspaper[] = [];
   
   try {
+    console.log('[PAGE/HOME] Richiesta layout homepage, fetch dei giornalini dal DB in corso...');
     // In a Server Component, we can query the DB directly!
     // better-sqlite3's .all() returns an array of objects
     const [rows] = await db.query('SELECT * FROM newspapers ORDER BY year DESC, title DESC');
+    console.log(`[PAGE/HOME] Trovati ${(rows as any[]).length} giornalini.`);
     
     // Map snake_case DB columns to camelCase Props
     newspapers = (rows as any[]).map(row => ({
@@ -31,7 +33,7 @@ export default async function Home() {
       pdfPath: row.pdf_path
     }));
   } catch (error) {
-    console.error('Failed to fetch newspapers:', error);
+    console.error('[PAGE/HOME] ERRORE: fetch dal database fallito:', error);
   }
 
   return (

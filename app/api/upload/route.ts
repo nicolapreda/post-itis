@@ -10,6 +10,7 @@ import sharp from 'sharp';
 const execAsync = promisify(exec);
 
 export async function POST(request: Request) {
+    console.log('[API/UPLOAD] Ricevuta nuova richiesta di upload.');
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
@@ -17,11 +18,15 @@ export async function POST(request: Request) {
         const title = formData.get('title') as string;
         const year = formData.get('year') as string;
 
+        console.log(`[API/UPLOAD] Dati estratti: Titolo="${title}", Anno="${year}", PDF="${file?.name}" (${file?.size} bytes), Copertina=${cover ? 'Presente' : 'Assente'}`);
+
         if (!file || !title || !year) {
+            console.error('[API/UPLOAD] ERRORE: Campi obbligatori mancanti.');
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
         const uploadDir = path.join(process.cwd(), 'public/uploads');
+        console.log(`[API/UPLOAD] Verifica/Creazione directory: ${uploadDir}`);
         await mkdir(uploadDir, { recursive: true });
 
         // --- 1. Handle PDF Upload & Compression ---
@@ -42,9 +47,11 @@ export async function POST(request: Request) {
             const compressedFilePath = path.join(uploadDir, compressedFilename);
 
             // Ghostscript command for ebook quality (good balance)
+            console.log(`[API/UPLOAD] Tentativo di compressione PDF con Ghostscript... in ${compressedFilePath}`);
             const gsCommand = `gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="${compressedFilePath}" "${filePath}"`;
 
             await execAsync(gsCommand);
+            console.log(`[API/UPLOAD] Compressione PDF completata con successo!`);
 
             // If successful, replace original with compressed or just point to compressed
             // Let's keep compressed as the main file
@@ -53,7 +60,7 @@ export async function POST(request: Request) {
             // Optional: Delete original if compression worked to save space
             await unlink(filePath);
         } catch (gsError) {
-            console.warn('Ghostscript compression failed/skipped:', gsError);
+            console.warn(`[API/UPLOAD] Compressione Ghostscript fallita o skippata:`, gsError);
             // Fallback: use original file
         }
 
@@ -65,11 +72,13 @@ export async function POST(request: Request) {
             const coverFilename = `cover-${timestamp}-${safeName.replace('.pdf', '')}.jpg`;
             const coverPath = path.join(uploadDir, coverFilename);
 
+            console.log(`[API/UPLOAD] Compressione ed elaborazione Copertina con Sharp...`);
             // Compress and resize image using Sharp
             await sharp(coverBuffer)
                 .resize({ width: 800, withoutEnlargement: true }) // Reasonable max width
                 .jpeg({ quality: 80 })
                 .toFile(coverPath);
+            console.log(`[API/UPLOAD] Copertina salvata in: ${coverPath}`);
 
             coverPubPath = `/uploads/${coverFilename}`;
         } else {
@@ -80,14 +89,16 @@ export async function POST(request: Request) {
 
         // --- 3. Save to Database ---
         try {
+            console.log(`[API/UPLOAD] Salvataggio nel Database...`);
             const [result] = await db.execute(
                 'INSERT INTO newspapers (title, year, pdf_path, cover_path) VALUES (?, ?, ?, ?)',
                 [title, year, finalPdfPath, coverPubPath || null]
             );
+            console.log(`[API/UPLOAD] SUCCESS! Inserito nel Database con ID: ${(result as any).insertId}`);
 
             return NextResponse.json({ success: true, id: (result as any).insertId });
         } catch (dbError) {
-            console.error('Database insertion failed:', dbError);
+            console.error('[API/UPLOAD] ERRORE: Inserimento Database fallito!', dbError);
             return NextResponse.json(
                 { error: 'File saved but database insert failed', path: finalPdfPath },
                 { status: 503 }
@@ -95,7 +106,7 @@ export async function POST(request: Request) {
         }
 
     } catch (error) {
-        console.error('Upload error:', error);
+        console.error('[API/UPLOAD] ERRORE INTERNO DEL SERVER:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

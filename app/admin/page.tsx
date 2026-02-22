@@ -6,9 +6,11 @@ import { deleteNewspaper } from '@/app/lib/admin-actions';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
+  console.log('[PAGE/ADMIN] Avvio caricamento dashboard di amministrazione...');
   // Fetch existing newspapers
   const [rows] = await db.query('SELECT * FROM newspapers ORDER BY created_at DESC');
   const newspapers = rows as any[];
+  console.log(`[PAGE/ADMIN] Trovati ${newspapers.length} giornalini caricati nel sistema.`);
 
   async function uploadAction(formData: FormData) {
     'use server';

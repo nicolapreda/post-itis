@@ -47,7 +47,7 @@ export default function UrbanGrid({ newspapers }: UrbanGridProps) {
               <div className="h-1 flex-grow bg-black"></div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 sm:gap-x-8 gap-y-8 sm:gap-y-16">
               {groupedNewspapers[year].map((paper, index) => (
                  <div key={paper.id} className="transform transition-all">
                    <IssueCard {...paper} index={index} />

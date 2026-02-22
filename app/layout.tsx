@@ -10,20 +10,30 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: {
     template: '%s | Post-Itis',
-    default: 'Post-Itis | Archivio Digitale ITIS Paleocapa',
+    default: "Post-Itis | L'Archivio Digitale dell'ITIS Paleocapa",
   },
-  description: "L'archivio digitale del giornalino scolastico dell'ITIS P. Paleocapa di Bergamo. Leggi gli ultimi numeri, scopri chi siamo e resta aggiornato.",
+  description: "Esplora le voci e le idee degli studenti dell'ITIS P. Paleocapa di Bergamo. Sfoglia l'archivio storico di Post-Itis, leggi gli ultimi numeri e scopri la nostra redazione.",
   openGraph: {
-    title: 'Post-Itis | Archivio Digitale',
-    description: "L'archivio digitale del giornalino scolastico dell'ITIS P. Paleocapa di Bergamo.",
-    url: 'https://postitis.it', // Replace with actual URL if known, or leave generic
+    title: "Post-Itis | L'Archivio Digitale dell'ITIS Paleocapa",
+    description: "Esplora le voci e le idee degli studenti dell'ITIS P. Paleocapa di Bergamo. Sfoglia l'archivio storico di Post-Itis, leggi gli ultimi numeri e scopri la nostra redazione.",
+    url: 'https://post-itis.it',
     siteName: 'Post-Itis',
+    images: [
+      {
+        url: 'https://post-itis.it/assets/post-itis.metadata.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Post-Itis Cover Image',
+      }
+    ],
     locale: 'it_IT',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Post-Itis | Archivio Digitale',
+    title: "Post-Itis | L'Archivio Digitale dell'ITIS Paleocapa",
+    description: "Esplora le voci e le idee degli studenti dell'ITIS P. Paleocapa di Bergamo. Sfoglia l'archivio storico di Post-Itis, leggi gli ultimi numeri e scopri la nostra redazione.",
+    images: ['https://post-itis.it/assets/post-itis.metadata.jpg'],
   },
   icons: {
     icon: '/favicon.png',
